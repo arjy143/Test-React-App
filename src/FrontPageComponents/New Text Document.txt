@@ -1,0 +1,40 @@
+import React, { useState } from 'react';  
+  
+const PredictionGetter = () => {  
+  const [inputValue, setInputValue] = useState('');  
+  const [responseData, setResponseData] = useState('');  
+  
+  const handleSubmit = () => {  
+    const url = '/train-model/?ticker=${inputValue}';
+    fetch(url, {  
+      method: 'POST',  
+      headers: {  
+        'Content-Type': 'application/json',  
+      },  
+      body: JSON.stringify({ input: inputValue }),  
+    })  
+      .then(response => response.json())  
+      .then(data => {  
+        // Update response data  
+        setResponseData(data.result);  
+      })  
+      .catch(error => {  
+        // Handle any errors here  
+        console.error(error);  
+      });  
+  };  
+  
+  return (  
+    <div>  
+      <input  
+        type="text"  
+        value={inputValue}  
+        onChange={e => setInputValue(e.target.value)}  
+      />  
+      <button onClick={handleSubmit}>Submit</button>  
+      <p>{responseData}</p>  
+    </div>  
+  );  
+};  
+  
+export default PredictionGetter;  
